@@ -1,3 +1,4 @@
 *.tar.zst filter=lfs diff=lfs merge=lfs -text
 *.tar.zst
 *.tar.zst
+*.tar.zst
