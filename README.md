@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # UDS Core Slim RKE2 
 
 UDS Core Slim Dev that is not opinionated around k3d.
