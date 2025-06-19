@@ -30,7 +30,7 @@ components:
             setVariables:
               - name: BASE_IP
         after:
-          - cmd: ./zarf tools kubectl rollout restart deployment coredns -n kube-system
+          - cmd: ./zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.dev"
     charts:
       - name: metallb
