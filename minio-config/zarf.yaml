@@ -1,0 +1,23 @@
+kind: ZarfPackageConfig
+metadata:
+  name: minio-config
+  description: "Additional variables and actions required for bundle"
+  version: "0.0.1"
+  architecture: amd64
+
+components:
+  - name: loki-secrets
+    required: true
+    actions:
+      onDeploy:
+        before:
+          - cmd: ./zarf tools kubectl get secret -n loki minio-loki --template={{.data.access_key}} | base64 -d
+            mute: true
+            setVariables:
+              - name: LOKI_S3_ACCESS_KEY_ID
+                sensitive: true
+          - cmd: ./zarf tools kubectl get secret -n loki minio-loki --template={{.data.secret_key}} | base64 -d
+            mute: true
+            setVariables:
+              - name: LOKI_S3_SECRET_ACCESS_KEY
+                sensitive: true

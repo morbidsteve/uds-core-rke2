@@ -160,3 +160,116 @@ packages:
               value:
                 name: JAVA_OPTS_KC_HEAP
                 value: "-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxRAM=1G"
+
+  - name: minio-package
+    repository: ghcr.io/defenseunicorns/packages/uds/minio-operator
+    ref: 7.1.1-uds.2-upstream
+    overrides:
+      minio-operator:
+        uds-minio-config:
+          values:
+            - path: apps
+              value:
+                - name: loki
+                  user: loki
+                  namespace: loki
+                  bucketNames:
+                    - loki-chunks
+                    - loki-ruler
+                    - loki-admin
+                  policy: ""
+                  copyPassword:
+                    enabled: true
+                    secretName: minio-loki
+                    secretIDKey: access_key
+                    secretPasswordKey: secret_key
+            - path: rootPassword
+              value: changeme
+
+        minio-tenant:
+          variables:
+            - name: MINIO_POOL_NAME
+              path: "tenant.pools[0].name"
+              description: "Minios Pool Name"
+              default: "pool-0"
+            - name: MINIO_VOLSPER_SERVER
+              path: "tenant.pools[0].volumesPerServer"
+              description: "Minios Volumes per server"
+              default: "1"
+            - name: MINIO_SERVERS
+              path: "tenant.pools[0].servers"
+              description: "Minios servers"
+              default: "1"
+            - name: MINIO_PVC_SIZE
+              path: "tenant.pools[0].size"
+              description: "Minios PVC Size"
+              default: "10Gi"
+
+  - name: minio-config
+    path: ./minio-config/
+    ref: 0.0.1
+    exports:
+      - name: LOKI_S3_ACCESS_KEY_ID
+      - name: LOKI_S3_SECRET_ACCESS_KEY
+
+    # UDS core logging stack which includes loki and vector
+  - name: core-logging
+    repository: ghcr.io/defenseunicorns/packages/uds/core-logging
+    ref: 0.44.0-upstream
+    imports:
+      - name: LOKI_S3_ACCESS_KEY_ID
+        package: minio-config
+      - name: LOKI_S3_SECRET_ACCESS_KEY
+        package: minio-config
+    overrides:
+      vector:
+        vector:
+          values:
+            - path: "tolerations"
+              value:
+                - operator: "Exists"
+                  effect: "NoSchedule"
+      loki:
+        loki:
+          variables:
+            - name: LOKI_S3_ACCESS_KEY_ID
+              path: loki.storage.s3.accessKeyId
+            - name: LOKI_S3_SECRET_ACCESS_KEY
+              path: loki.storage.s3.secretAccessKey
+          values:
+            - value: "loki-chunks"
+              path: loki.storage.bucketNames.chunks
+            - value: "loki-ruler"
+              path: loki.storage.bucketNames.ruler
+            - value: "loki-admin"
+              path: loki.storage.bucketNames.admin
+            - value: "http://uds-minio-hl.minio.svc.cluster.local:9000"
+              path: loki.storage.s3.endpoint
+            - value: ""
+              path: loki.storage.s3.region
+            - value: true
+              path: loki.storage.s3.s3ForcePathStyle
+            - value: "v4"
+              path: loki.storage.s3.signatureVersion
+            # Override default dns service name for Loki Gateway at create-time
+            - path: "global.dnsService"
+              value: "rke2-coredns-rke2-coredns"
+
+  - name: core-runtime-security
+    repository: ghcr.io/defenseunicorns/packages/uds/core-runtime-security
+    ref: 0.44.0-upstream
+
+    # UDS core metrics server which includes metrics-server
+  - name: core-metrics-server
+    repository: ghcr.io/defenseunicorns/packages/uds/core-metrics-server
+    ref: 0.44.0-upstream
+
+  - name: dos-games
+    repository: ghcr.io/uds-packages/dos-games
+    ref: 0.0.1-uds.3-upstream
+
+# UDS UI
+# - name: uds-runtime
+#   repository: ghcr.io/defenseunicorns/packages/uds/uds-runtime
+#   ref: 0.19.1-upstream
+#
