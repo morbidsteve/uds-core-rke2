@@ -258,6 +258,14 @@ packages:
   - name: core-runtime-security
     repository: ghcr.io/defenseunicorns/packages/uds/core-runtime-security
     ref: 0.44.0-upstream
+    overrides:
+      neuvector:
+        core:
+          values:
+            - path: "enforcer.tolerations"
+              value:
+                - operator: "Exists"
+                  effect: "NoSchedule"
 
     # UDS core metrics server which includes metrics-server
   - name: core-metrics-server
