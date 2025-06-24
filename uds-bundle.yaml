@@ -272,9 +272,6 @@ packages:
     repository: ghcr.io/defenseunicorns/packages/uds/core-metrics-server
     ref: 0.44.0-upstream
 
-  - name: dos-games
-    repository: ghcr.io/uds-packages/dos-games
-    ref: 0.0.1-uds.3-upstream
 
 # UDS UI
 # - name: uds-runtime

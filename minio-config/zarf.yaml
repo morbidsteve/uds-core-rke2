@@ -3,7 +3,7 @@ metadata:
   name: minio-config
   description: "Additional variables and actions required for bundle"
   version: "0.0.1"
-  architecture: amd64
+  architecture: arm64
 
 components:
   - name: loki-secrets
