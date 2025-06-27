@@ -1,0 +1,10 @@
+kind: UDSBundle
+metadata:
+  name: wordpress-bundle
+  description: Bundle with wordpress.
+  version: 0.0.1
+
+packages:
+  - name: wordpress
+    path: ./
+    ref: 16.0.4
