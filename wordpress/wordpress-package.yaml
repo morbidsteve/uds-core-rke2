@@ -37,24 +37,3 @@ spec:
       portName: http
       description: "svcmonitor"
       kind: ServiceMonitor
-
-
-
-
-
-
-apiVersion: uds.dev/v1alpha1
-kind: Package
-metadata:
-  name: wordpress
-  namespace: wordpress
-spec:
-  network:
-    # Expose rules generate Istio VirtualServices and related network policies
-    expose:
-      - service: wordpress
-        selector:
-          app.kubernetes.io/name: wordpress
-        gateway: tenant
-        host: wordpress
-        port: 9898
