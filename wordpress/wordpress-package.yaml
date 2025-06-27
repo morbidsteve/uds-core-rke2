@@ -15,8 +15,8 @@ spec:
         port: 8080
   # SSO allows for the creation of Keycloak clients and with automatic secret generation and protocolMappers
   sso:
-    - name: Podinfo SSO
-      clientId: uds-core-podinfo
+    - name: wordpress SSO
+      clientId: uds-core-wordpress
       redirectUris:
         - "https://wordpress.uds.dev/wp-admin"
       enableAuthserviceSelector:
@@ -24,16 +24,3 @@ spec:
       groups:
         anyOf:
           - "/UDS Core/Admin"
-  monitor:
-    - selector:
-        app.kubernetes.io/name: wordpress
-      targetPort: 8080
-      portName: http
-      description: "podmonitor"
-      kind: PodMonitor
-    - selector:
-        app.kubernetes.io/name: podinfo
-      targetPort: 9898
-      portName: http
-      description: "svcmonitor"
-      kind: ServiceMonitor
