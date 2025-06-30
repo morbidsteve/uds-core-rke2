@@ -79,6 +79,12 @@ disable:
 
 Save and exit vim by typing `:x!` and pressing Enter.
 
+Restart RKE2 to apply these configuration changes.
+
+```sh
+systemctl restart rke2-server.service
+```
+
 ## UDS Setup
 
 We're doing this in the home directory (`~`), but follow these steps wherever you're comfortable.
