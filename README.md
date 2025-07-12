@@ -25,9 +25,9 @@ You can see the defaults by running `sudo sysctl fs.inotify`
 
 To set higher limits on these, run:
 ```
-sudo sysctl -w fs.inotify.max_queued_events = 16384
-sudo sysctl -w fs.inotify.max_user_instances = 256
-sudo sysctl -w fs.inotify.max_user_watches = 65536
+sudo sysctl -w fs.inotify.max_queued_events=16384
+sudo sysctl -w fs.inotify.max_user_instances=256
+sudo sysctl -w fs.inotify.max_user_watches=65536
 ```
 
 ### UDS Core for RKE Experiment Installation Instructions
